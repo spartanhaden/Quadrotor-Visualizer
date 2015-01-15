@@ -2,10 +2,6 @@ import processing.serial.*;
 
 Serial myPort;
 
-//final String serialPort = "/dev/cu.usbmodem1411";
-//final String serialPort = "/dev/cu.usbserial-A901J2ZB";
-final String serialPort = "/dev/ttyUSB1";
-
 final int VIEW_SIZE_X = 1000;
 final int VIEW_SIZE_Y = 1000;
 int x = 0;
@@ -34,7 +30,7 @@ float rotate = .5;
 
 void setup() {
     size(VIEW_SIZE_X, VIEW_SIZE_Y);
-    myPort = new Serial(this, serialPort, 9600);
+    myPort = new Serial(this, Serial.list()[Serial.list().length - 1], 9600);
     delay(100);
     myPort.clear();
     myPort.bufferUntil('n');
