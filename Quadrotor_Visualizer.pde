@@ -2,6 +2,8 @@ import processing.serial.*;
 
 Serial myPort;
 
+final boolean HEARTBEATS_ENABLED = false;
+
 final int VIEW_SIZE_X = 1200;
 final int VIEW_SIZE_Y = 700;
 final int LINE_LENGTH = 2;
@@ -21,18 +23,17 @@ float rotate = .5;
 void setup() {
     size(VIEW_SIZE_X, VIEW_SIZE_Y);
     //size(VIEW_SIZE_X, VIEW_SIZE_Y,P3D);
-    myPort = new Serial(this, Serial.list()[Serial.list().length - 1], 9600);
+    myPort = new Serial(this, Serial.list()[Serial.list().length - 1], 57600);
     delay(100);
     myPort.clear();
     myPort.bufferUntil('\n');
     background(0);
+    noLoop();
 }
 
-void draw() {
-   //box();
-}
+void draw() {}
 
-void box(){
+void box() {
     background(0);
     translate(width/2, height/2, -100);
     rotateX(accelVals[0]*PI);
@@ -56,7 +57,9 @@ void serialEvent(Serial p) {
             //plotSphere();
             //lineGraph();
             //pointGraph();
-            p.write('a');
+            redraw();
+            if(HEARTBEATS_ENABLED)
+                p.write('a');
         }
     }
 }
@@ -89,6 +92,7 @@ void angle() {
     line(width / 2, height / 2, (width / 2) + sin(accelVals[2]*PI) * 200, (height / 2) + cos(accelVals[2]*PI) * 200);
     rect(25, 125, 100 + (100 * accelVals[2]), 25);
     text("Z    " + accelVals[2], 250, 125);
+    text("FPS    " + frameRate, 250, 175);
 }
 
 void lineGraph() {
